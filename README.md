@@ -74,15 +74,12 @@ switches between 0.16 V and 4.88 V.
 ### CT003 only
 
 The CT003 does not pull the line to 5 V. The high level is only about 1.0 V
-(cursor a in the photo is set to 1.00 V). Something in the CT003 input is
-connected directly to the line and limits the voltage. It behaves like a
-diode: with more current (from the SmartGateway pull-up, see below), the level
-rises only a little, to about 1.5 V. This fits the forward voltage of an LED,
-for example the LED of an optocoupler. Marstek does not publish the circuit,
-so this is an assumption.
+(cursor a in the photo is set to 1.00 V). The CT003 input loads the line and
+holds it at about 1.0 V. With the SmartGateway pull-up added, the level rises
+only to about 1.5 V (see below). Marstek does not publish the circuit, and the
+exact input circuit is not known.
 
-The CT003 still reads the meter, because its input only needs current, not
-voltage. A similar clamping effect is described in
+The CT003 still reads the meter correctly at this level. A similar clamping effect is described in
 [esphome-p1reader issue #55](https://github.com/psvanstrom/esphome-p1reader/issues/55).
 
 ![Data line with only the CT003 connected: the high level is clamped at about 1.0 V (cursor a)](images/scope_ct003_only.jpg)
@@ -115,8 +112,8 @@ How it works:
 
 - **The meter pulls the line low.** The diode conducts. The CT003 input is
   pulled down to the line voltage plus the low forward voltage of the Schottky
-  diode. This is low enough to switch the CT003 input off, so the CT003 sees a
-  "low".
+  diode. The CT003 reads this level as a "low" (measured: about 0.4–0.5 V on
+  the CT003 side).
 - **The meter releases the line.** The diode blocks. The CT003 input is no
   longer connected to the line, so it cannot clamp the line at 1.5 V. The
   SmartGateway pull-up pulls the line high, and the CT003 input goes back to its
